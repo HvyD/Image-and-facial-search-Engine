@@ -22,21 +22,9 @@ class Searcher:
  
 		# loop over the index
 		for (k, features) in self.index.items():
-			# compute the chi-squared distance between the features
-			# in our index and our query features -- using the
-			# chi-squared distance which is normally used in the
-			# computer vision field to compare histograms
 			d = self.chi2_distance(features, queryFeatures)
- 
-			# now that we have the distance between the two feature
-			# vectors, we can udpate the results dictionary -- the
-			# key is the current image ID in the index and the
-			# value is the distance we just computed, representing
-			# how 'similar' the image in the index is to our query
 			results[k] = d
  
-		# sort our results, so that the smaller distances (i.e. the
-		# more relevant images are at the front of the list)
 		results = sorted([(v, k) for (k, v) in results.items()])
  
 		# return our results
@@ -62,8 +50,6 @@ args = vars(ap.parse_args())
 index = cPickle.loads(open(args["index"]).read())
 searcher = Searcher(index)
 
-# loop over images in the index -- we will use each one as
-# a query image
 for (query, queryFeatures) in index.items():
 	# perform the search using the current query
 	results = searcher.search(queryFeatures)
@@ -74,10 +60,7 @@ for (query, queryFeatures) in index.items():
 	cv2.imshow("Query", queryImage)
 	print "query: %s" % (query)
  
-	# initialize the two montages to display our results --
-	# we have a total of 25 images in the index, but let's only
-	# display the top 10 results; 5 images per montage, with
-	# images that are 400x166 pixels
+	
 	montageA = np.zeros((166 * 5, 400, 3), dtype = "uint8")
 	montageB = np.zeros((166 * 5, 400, 3), dtype = "uint8")
  
